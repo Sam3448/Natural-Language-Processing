@@ -1,12 +1,12 @@
 # Natural-Language-Processing
 Coded by Weicheng Zhang.
 
-##Introduction
+## Introduction
 This is the course project for Natural Language Processing, Fall 2017.
 
 Homework 1: using grammar file and sentence generator to generate sentences with complex structure.
 
-##Instruction & Parameters
+## Instruction & Parameters
 
 Homework 1: the q1.java is can be used to generate sentences based on certain grammar files. 
 It takes three parameters: 
