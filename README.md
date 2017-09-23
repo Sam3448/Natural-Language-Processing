@@ -1,5 +1,7 @@
 # Natural-Language-Processing
 
+Coded by Weicheng Zhang.
+
 ##Introduction
 This is the course project for Natural Language Processing, Fall 2017.
 
