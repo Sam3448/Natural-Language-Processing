@@ -1,0 +1,94 @@
+# Symbols in the grammar are case-sensitive.
+# 
+# This grammar uses a convention that
+#    - terminals are lowercase          (president)
+#    - preterminals are capitalized     (Noun)
+#    - other nonterminals are all-caps  (NP)
+# 
+# This convention just makes grammars more readable to humans.  Thus:
+#
+#    - When *you* are writing grammars in questions 3 and 6, you should 
+#      follow this convention unless you have a good reason not to.  
+#
+#    - But your *program* should still work with grammars that don't
+#      follow this convention.  So how can your program reliably tell
+#      the difference between terminal and nonterminal symbols?  If
+#      there is at least one rule for rewriting a symbol, then that
+#      symbol is a nonterminal and should be rewritten.
+#######################
+
+# Rules for creating full sentences.
+
+1	ROOT	S .
+1	ROOT	S !
+1	ROOT	is it true that S ?
+
+# The basic grammar rules.  Here's what the abbreviations stand for:
+#    S  = sentence
+#    NP = noun phrase
+#    VP = verb phrase
+#    PP = prepositional phrase
+#    Det = determiner (sometimes called "article")
+#    Prep = preposition
+#    Adj = adjective
+
+10	S	NP VP
+1	S	S C_Conj S
+1	S	Clause VP
+1	VP	Verb_t NP
+1	VP	Verb_int
+1	VP	VP PP
+10	NP	Det C_Noun
+1	NP	P_Noun
+1	NP	NP PP
+1	NP	NP C_Conj NP
+1	PP	Prep NP
+1	Adj	Adv Adj
+3	C_Noun	Adj C_Noun
+1	P_Noun	Adj P_Noun
+1	Clause	S_Conj S
+1	S	S Clause
+1	Verb_t	Verb_t C_Conj Verb_t
+1	Verb_int	Verb_int C_Conj Verb_int
+# Vocabulary.  Your program can see that "ate" is a terminal
+# symbol because there exists no rule for rewriting it.
+# Any symbol that can rewrite as a terminal (or a string of 
+# terminals, like "chief of staff") is called a "preterminal."  Notice 
+# that a preterminal is a special kind of nonterminal.
+
+1	Verb_t	ate
+1	Verb_t	wanted
+1	Verb_t	kissed
+1	Verb_t	want
+1	Verb_t	understood
+1	Verb_t	pickled
+1	Verb_int	sighed
+1	Verb_int	thought
+1	Verb_int	worked
+1	Verb_t	perplexed
+1	C_Conj	and
+1	S_Conj	that
+1	Det	the
+1	Det	a
+1	Det	every
+1	Adv	very
+1	Pronoun	it
+1	C_Noun	president
+1	P_Noun	sally
+
+
+1	C_Noun	sandwich
+1	C_Noun	pickle
+1	C_Noun	chief of staff
+1	C_Noun	floor
+1	C_Noun	desk
+1	C_Noun	proposal
+1	Adj	fine
+1	Adj	delicious
+1	Adj	perplexed
+1	Adj	pickled
+1	Adj	Adv Adj
+1	Prep	with
+1	Prep	on
+1	Prep	under
+1	Prep	in

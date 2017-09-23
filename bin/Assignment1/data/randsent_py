@@ -1,0 +1,96 @@
+#!/usr/bin/python3
+import argparse
+parser = argparse.ArgumentParser(prog='randsent')
+parser.add_argument('-t',dest='tree',action='store_true',help='show tree structure')
+parser.add_argument('path',nargs =1,help='the path to grammar file')
+parser.add_argument('N',nargs = 1,help='the number of sentence')
+args =parser.parse_args()
+grammar_file_path=''.join(args.path)
+sentence_number= int(''.join(args.N))
+#Parser construct and argument processsing
+#grammar_file_path = "./grammar2.gr"
+
+#sentence_number = 5
+
+grammar_file = open(grammar_file_path, 'r')
+
+lines = grammar_file.readlines()
+
+rules = []
+
+for line in lines:
+    if line[0].isdigit() and line.find("#")==-1:
+        #print(line)
+        entry = line.strip("\n").split("\t")
+        #print(entry)
+        for i in range(0,int(entry[0])):
+            rules.append(entry)
+
+#read over grammar file and compose entry in grammar file in to rule book in regards to their weight
+#print(rules)
+
+nonterminals = []
+
+for rule in rules:
+    nonterminals.append(rule[1])
+#construct nonterminal pool from LHS in rule book
+import random
+
+
+def expand(item):
+    indices_in_nonterminals = [index for index, value in enumerate(nonterminals) if value == item]
+    middle_item = rules[random.choice(indices_in_nonterminals)][2]
+    #print(middle_item)
+    return middle_item.split(" ")
+#expand a LHS into RHS randomly from nonterminal pool
+def recursive_derive(item):
+    if isTerminal(item):
+        return item
+    else:
+        list_of_subitem = expand(item)
+        list_of_subitem[:] = [recursive_derive(x) for x in list_of_subitem]
+        # for subitem in list_of_subitem:
+        #     subitem = recursive_derive(subitem)
+        return ' '.join(list_of_subitem)
+#recusively expand a string from a root item
+def recursive_tree(item,depth):
+    self_depth = depth+1
+    if isTerminal(item):
+        print(' '+item,end='')
+        #return item
+    else:
+        list_of_subitem = expand(item)
+        #list_of_subitem[:] = [recursive_derive(x) for x in list_of_subitem]
+        print('\t('+item,end='')
+        recursive_tree(list_of_subitem[0],self_depth)
+        print(')',end='')
+        for i in range(1,len(list_of_subitem)):
+            print('\n',end='')
+            for x in range(depth):
+                print('\t',end='')#this is depth indicator
+
+            recursive_tree(list_of_subitem[i],self_depth)
+            print(')',end='')
+#recursivly print indented generative tree structure
+def isTerminal(item):
+    try:
+        index = nonterminals.index(item)
+    except ValueError:
+        return True
+    else:
+        return False
+
+# determin if a item is termial by looking it up in nontermial pool
+
+import sys
+#sys.setrecursionlimit(15000)
+def run(tree,sentence_number):
+    if tree:
+        for i in range(0, sentence_number):
+            recursive_tree('ROOT', 1)
+            print('\n',end='')
+    else:
+        for i in range(0, sentence_number):
+            print(recursive_derive('ROOT'))
+#the run funtion interfaces the input argument and internal function
+run(args.tree,sentence_number)
