@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+./textcat TEST loglin0.1 chars-40.txt en.50k sp.50k $@

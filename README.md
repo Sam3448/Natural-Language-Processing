@@ -19,3 +19,5 @@ Homework 2: using Word2Vec and cosine similarity to get similar neighbors of one
 	It takes two parameters:
 	* file path: the path of the grammar file.
 	* word/words: one word or three words as the original words for finding neighbors
+
+3. Homework 3: the ./textcat can be used to generate training models based on AddLambda, BackoffAddLambda, Loglinear models.
