@@ -1,0 +1,16 @@
+NONE
+(ROOT (S (VP (TO to)
+             (VP (VB go)
+                 (PP (IN under))))
+         (PUNC. .)))
+113.43891337327882
+(ROOT (S (VP (VBZ has)
+             (VP (VBN done)))
+         (PUNC. .)))
+119.71203729151483
+(ROOT (S (NP (NP (JJR easier))
+             (NP (NNS jobs))
+             (PUNC. .))))
+184.4554378147573
+NONE
+NONE

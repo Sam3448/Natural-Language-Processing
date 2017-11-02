@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -jar parse2.jar $1 $2 | ./prettyprint
