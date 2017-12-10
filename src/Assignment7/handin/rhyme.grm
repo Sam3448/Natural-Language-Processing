@@ -1,0 +1,12 @@
+import 'byte.grm' as bytelib;
+import 'arpabet.grm' as arpabet;
+
+arpa = SymbolTable['arpabet.sym'];
+Pronounce = StringFile['cmudict.txt', byte, arpa];
+arpaSigma = arpabet.Phoneme;
+#e
+export Ending = CDRewrite[arpaSigma : "".arpa, "".arpa, arpaSigma* arpabet.Stressed, arpaSigma*, 'ltr', 'obl'];
+#f
+export WordEnding = Optimize[Pronounce @ Ending];
+
+export InvWordEnding = Optimize[Invert[WordEnding]];

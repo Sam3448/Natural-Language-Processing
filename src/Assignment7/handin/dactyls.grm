@@ -1,0 +1,12 @@
+import 'arpabet.grm' as arpabet;
+
+arpa = SymbolTable['arpabet.sym'];
+arpaSigma = arpabet.Phoneme;
+
+Pronounce = StringFile['cmudict.txt', byte, arpa];
+StressPattern = CDRewrite[(arpabet.Consonant:"".arpa)|(arpabet.Stressed:"AA1".arpa)|(arpabet.Unstressed:"AA0".arpa)*, "".arpa, "".arpa, arpaSigma*, 'sim', 'obl'];
+Dacytl = ("1" | "2") "0" "0";
+ToByte = ("".arpa:"") | ("AA1".arpa:"1") | ("AA0".arpa:"0");
+
+export Results = Optimize[Project[Pronounce @ StressPattern @ ToByte @ (Dacytl*), 'input']];
+export ListResults = "" : Results;

@@ -1,0 +1,37 @@
+Zero = "0";
+One = "1";
+Bit = Zero | One;
+export First = Optimize[Zero Zero* Bit* One One One One?];
+export Second = Optimize[Zero+ Bit* One One One+];
+export Disagreement = Optimize[(First - Second) | (Second - First)];
+
+export Triplets = Optimize[Zero* (One{2} One+ Zero*)*];
+export NotPillars = Optimize[Bit* - (One{2})*];
+export Oddlets = Optimize[Zero* ((One{2})* One Zero+)* ((One{2})* One)? Zero*];
+
+#9
+Flip = ((Zero : One <2>) | (Zero <1>)) | ((One : Zero <2>) | (One <1>));
+export WFlip = Optimize[Flip ((Zero : Zero One <0.5>) | (One : Zero <0.4>))+ (One <0.5>)];
+export WeightedMultipath = (One : Zero <0.7>)+ (Bit <0.3>)* (Zero <0.9>)+ ;
+export WeightedMultipathOpt = Optimize[WeightedMultipath];
+
+T = WeightedMultipath;
+
+x = "100";
+y = "000";
+
+
+T_out = Project[ T, 'output']; # erases input from T
+xT_out = Project[ x @ T, 'output']; # erases input x from x @ T
+Ty_in = Project[ T @ y, 'input']; # erases output y from T @ y
+xTy = x @ T @ y;
+exTye = ("":x) @ T @ (y:""); # erases input x & output y from x @ T @ y
+export xT_out_opt = Optimize[xT_out];
+export Ty_in_opt = Optimize[Ty_in];
+export exTye_opt = Optimize[exTye];
+
+export NoDet = ("" <-0.1>)* (Bit <0.1>)*;
+export Test = Determinize[RmEpsilon[NoDet]];
+
+
+

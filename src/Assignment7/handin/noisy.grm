@@ -1,0 +1,40 @@
+import 'byte.grm' as bytelib;        # load a simple grammar (.grm)
+ByteSigma = (bytelib.kSpace | bytelib.kGraph);  # printable characters
+ByteSigmaStar = Optimize[ByteSigma*];
+
+export LM = LoadFst['entrain.fst'];  # load trigram language model (.fst)
+vocab = SymbolTable['entrain.sym'];  # load model's symbol table (.sym)
+RandomChar = bytelib.kGraph <4.54>;
+RandomWord= Optimize[(RandomChar (RandomChar <0.1>)* ) <2.3>];
+SpellOOV = "<unk>".vocab : RandomWord;
+Spell = StringFile['entrain.alpha', vocab, byte];
+
+
+# YOU WILL FILL IN THE REST
+
+export RandomComplete = CDRewrite["":ByteSigma*, "", "[EOS]", ByteSigmaStar, 'sim', 'obl'];
+export PossibleSpelling = Project[Spell, 'output'];
+export FormWord = Optimize[StringFile['entrain.alpha', byte, vocab]];
+export CompleteWord = Optimize[RandomComplete @ PossibleSpelling @ FormWord];
+
+export SpellText = ((Spell | SpellOOV) ("".vocab:" ".byte))*;
+export PrintText = ((Spell | ("<unk>".vocab:"<unk>")) ("".vocab : " ".byte))*;
+export DelSpaces = CDRewrite[" ":"", "", "", ByteSigmaStar, 'sim', 'obl'];
+
+export DelSomeSpaces = CDRewrite[" ":"", "", "", ByteSigmaStar, 'sim', 'opt'];
+
+AddPunctSpace = CDRewrite[" ":"", bytelib.kPunct, "[EOS]", ByteSigmaStar, 'sim', 'obl'];
+
+Suffix = "acy" | "al" | "ance" | "ence" | "dom" | "er" | "or" | "ism" | "ist" | "ity" | "ty" | "ment" | "ness";
+export DelSuffixes = CDRewrite[Suffix:"", bytelib.kAlpha, bytelib.kSpace|"[EOS]", ByteSigmaStar, 'sim', 'obl'];
+
+export Telephone = CDRewrite[("A"|"a"|"B"|"b"|"C"|"c" : "2") | ("D"|"d"|"E"|"e"|"F"|"f" : "3") | ("G"|"g"|"H"|"h"|"I"|"i" : "4") | ("J"|"j"|"K"|"k"|"L"|"l" : "5") | ("M"|"m"|"N"|"n"|"O"|"o" : "6") | ("P"|"p"|"Q"|"q"|"R"|"r"|"S"|"s" : "7") | ("T"|"t"|"U"|"u"|"V"|"v" : "8") | ("W"|"w"|"X"|"x"|"Y"|"y"|"Z"|"z" : "9"), "", "", ByteSigmaStar, 'sim', 'obl'] @ AddPunctSpace;
+
+export Tinyphone = Telephone @ CDRewrite[("2" : ""|"22") | ("3" : ""|"33") | ("4" : ""|"44") | ("5" : ""|"55") | ("6" : ""|"66") | ("7" : ""|"77") | ("8" : ""|"88") | ("9" : ""|"99"), "", "", ByteSigmaStar, 'sim', 'opt'] @ AddPunctSpace;
+
+export Composition = DelSuffixes @ Telephone @ AddPunctSpace;
+
+export InvLM = Invert[LM]; 
+export InvSpellText = Optimize[Invert[SpellText]];
+export InvDelSpaces = Optimize[Invert[DelSpaces]];
+
